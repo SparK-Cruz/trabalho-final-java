@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import edu.ctpositivo.scanner.Input;
 import edu.ctpositivo.trabalho.dao.*;
 import edu.ctpositivo.trabalho.model.*;
+import edu.ctpositivo.trabalho.view.comandas.*;
 
 public class ComandasController{
   private static ComandaDAO comandaDao = new ComandaDAO();
@@ -12,12 +13,16 @@ public class ComandasController{
   private static ProdutoDAO produtoDao = new ProdutoDAO();
 
   //Helper
-  public Produto findProduto(int idProduto) throws Exception{
-    return produtoDao.findById(idProduto);
+  public void validarProduto(int idProduto) throws Exception{
+    produtoDao.findById(idProduto);
   }
   //Helper
   public Comanda findComanda(int idComanda) throws Exception{
     return comandaDao.findById(idComanda);
+  }
+  //Helper
+  public List<ItemComanda> findItensComanda(int idComanda) throws Exception{
+    return itemDao.findByIdComanda(idComanda);
   }
 
   public void nova(Input entrada){
@@ -48,73 +53,51 @@ public class ComandasController{
   }
 
   public void mostrar(){
-    //entrada.readInt("Digite o número da comanda para exibir");
-    Comanda model = null;
-    try{
-      model = comandaDao.findById(id);
-    }catch(Exception e){
-      System.out.println("Comanda inválida");
-      return;
-    }
+    int id = 0;
+    Comanda model;
+    List<ItemComanda> itens;
 
-    int indice = 1;
-    double total = 0;
-    List<ItemComanda> itens = itemDao.findByIdComanda(id);
+    MostrarQualView mostrarQualView = new MostrarQualView(this);
+    id = mostrarQualView.render();
 
-    System.out.println(String.format("------ Comanda nº %d ------", model.getId()));
-    System.out.println(String.format("%3s\t%s\t%10s\t%9s\t%s\t%s\t%s",
-      "", "código", "nome", "tipo", "preço", "qtd", "total"));
-    for(ItemComanda item : itens){
-      mostrarItem(indice++, item);
+    while(true){
       try{
-        total += item.getTotal();
+        model = comandaDao.findById(id);
+        itens = itemDao.findByIdComanda(id);
+        break;
       }catch(Exception e){
-        //Produto inválido?
+        mostrarQualView.renderInvalid();
+        id = mostrarQualView.render();
+        if(id == 0)
+          return;
       }
     }
-    System.out.println("--------------------------");
-    System.out.println(String.format("Total: %.2f",
-      total));
+
+    MostrarView mostrarView = new MostrarView(this, model, itens);
+    mostrarView.render();
   }
 
-/*
-  public void excluir(int id){
-    //entrada.readInt("Digite o número da comanda para cancelar")
+  public void excluir(){
+    int id = 0;
     Comanda model = null;
-    try{
-      model = comandaDao.findById(id);
-    }catch(Exception e){
-      System.out.println("Comanda inválida");
-      return;
+
+    ExcluirQualView excluirQualView = new ExcluirQualView(this);
+    id = excluirQualView.render();
+
+    while(true){
+      try{
+        model = comandaDao.findById(id);
+        break;
+      }catch(Exception e){
+        excluirQualView.renderInvalid();
+        id = excluirQualView.render();
+        if(id == 0)
+          return;
+      }
     }
 
     comandaDao.delete(id);
-    System.out.println("Comanda cancelada com sucesso");
+    ExcluirView excluirView = new ExcluirView(this);
+    excluirView.render();
   }
-
-  //private
-
-  private void mostrarItem(ItemComanda item){
-    mostrarItem(0, item);
-  }
-  private void mostrarItem(int indice, ItemComanda item){
-    Produto produto = null;
-    try{
-      produto = item.getProduto();
-
-      if(indice <= 0){
-        System.out.println(String.format("%d\t%10s\t%9s\t%.2f\t%d\t%.2f",
-          produto.getId(), produto.getNome(), produto.getTipo().getDescricao(), produto.getValor(), item.getQuantidade(), item.getTotal()));
-        return;
-      }
-
-      System.out.println(String.format("%d\t%d\t%10s\t%9s\t%.2f\t%d\t%.2f",
-        indice, produto.getId(), produto.getNome(), produto.getTipo().getDescricao(), produto.getValor(), item.getQuantidade(), item.getTotal()));
-
-    }catch(Exception e){
-      System.out.println("Produto inválido");
-      return;
-    }
-  }
-  */
 }

@@ -6,8 +6,9 @@ import edu.ctpositivo.trabalho.controller.ComandasController;
 import edu.ctpositivo.trabalho.model.Comanda;
 import edu.ctpositivo.trabalho.model.ItemComanda;
 import edu.ctpositivo.trabalho.model.Produto;
+import edu.ctpositivo.trabalho.view.View;
 
-public class NovaView{
+public class NovaView extends View{
   private List<ItemComanda> itens = new ArrayList<ItemComanda>;
 
   public List<ItemComanda> getItens(){
@@ -17,11 +18,10 @@ public class NovaView{
   public int render(){
     int idProduto = 0;
     while((idProduto = entrada.readInt("Digite um código de produto ou 0 para finalizar o pedido")) != 0){
-      Produto produto = null;
       try{
-        produto = ((ComandasController)_).findProduto(idProduto);
+        ((ComandasController)_).validarProduto(idProduto);
       }catch(Exception e){
-        System.out.println("Produto inválido");
+        println("Produto inválido");
         continue;
       }
 
@@ -37,7 +37,8 @@ public class NovaView{
 
       itens.add(item);
 
-      System.out.println(item.getQuantidade() * produto.getValor());
+      println(item.getQuantidade() * produto.getValor());
     }
+    return 0;
   }
 }
