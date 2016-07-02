@@ -1,7 +1,11 @@
 package edu.ctpositivo.trabalho.view.comandas;
 
 import java.util.List;
+import edu.ctpositivo.trabalho.controller.ComandasController;
 import edu.ctpositivo.trabalho.view.View;
+import edu.ctpositivo.trabalho.model.Comanda;
+import edu.ctpositivo.trabalho.model.Produto;
+import edu.ctpositivo.trabalho.model.ItemComanda;
 
 public class MostrarView extends View{
   private List<ItemComanda> itens;
@@ -29,6 +33,7 @@ public class MostrarView extends View{
     println("--------------------------");
     println(String.format("Total: %.2f",
       total));
+    println();
     return 0;
   }
 

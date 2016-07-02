@@ -14,13 +14,17 @@ public class Input{
 
   public String read(String prompt){
     System.out.println(prompt);
-    return this.scanner.nextLine();
+    String value = this.scanner.nextLine();
+    System.out.println("");
+    return value;
   }
   public double readDouble(String prompt){
     while(true){
       System.out.println(prompt);
       try{
-        return Double.parseDouble(this.scanner.nextLine());
+        double value = Double.parseDouble(this.scanner.nextLine());
+        System.out.println("");
+        return value;
       }catch(NumberFormatException ex){
         //loop
       }
@@ -30,7 +34,9 @@ public class Input{
     while(true){
       System.out.println(prompt);
       try{
-        return Integer.parseInt(this.scanner.nextLine());
+        int value = Integer.parseInt(this.scanner.nextLine());
+        System.out.println("");
+        return value;
       }catch(NumberFormatException ex){
         //loop
       }
@@ -39,5 +45,6 @@ public class Input{
   public void pause(String prompt){
     System.out.println(prompt);
     this.scanner.nextLine();
+    System.out.println("");
   }
 }

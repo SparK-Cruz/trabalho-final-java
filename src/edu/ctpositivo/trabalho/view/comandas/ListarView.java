@@ -1,7 +1,9 @@
 package edu.ctpositivo.trabalho.view.comandas;
 
 import java.util.List;
+import edu.ctpositivo.trabalho.controller.ComandasController;
 import edu.ctpositivo.trabalho.view.View;
+import edu.ctpositivo.trabalho.model.Comanda;
 
 public class ListarView extends View{
   private List<Comanda> comandas;
@@ -20,6 +22,7 @@ public class ListarView extends View{
         comanda.getId(), comanda.getItens().size(), comanda.getTotal()));
     }
     println(String.format("Total de comandas: %d", comandas.size()));
+    println();
     return 0;
   }
 }

@@ -1,29 +1,33 @@
 package edu.ctpositivo.trabalho.controller;
 
 import java.util.List;
+import edu.ctpositivo.trabalho.model.Report;
 import edu.ctpositivo.trabalho.model.Comanda;
 import edu.ctpositivo.trabalho.dao.ComandaDAO;
+import edu.ctpositivo.trabalho.view.reports.*;
 
-public class ReportsController{
-  public static final void vendas(){
+public class ReportsController extends BaseController{
+  public void vendas(){
     int size = 0;
     int lastId = 0;
     double total = 0;
 
+    Report report = new Report();
+
     ComandaDAO comandaDao = new ComandaDAO();
     List<Comanda> comandas = comandaDao.all();
 
-    size = comandas.size();
+    size = comandaDao.count();
     lastId = comandaDao.getLastId();
 
     for(Comanda comanda : comandas){
       total += comanda.getTotal();
     }
 
-    System.out.println("------ Resumo geral ------");
-    System.out.println(String.format("Vendas feitas: %d", size));
-    System.out.println(String.format("Vendas canceladas: %d", lastId - size));
-    System.out.println(String.format("Total de entrada: %.2f", total));
-    System.out.println("--------------------------");
+    report.setVendasFeitas(size);
+    report.setVendasCanceladas(lastId - size);
+    report.setValorTotal(total);
+
+    (new VendasView(this, report)).render();
   }
 }

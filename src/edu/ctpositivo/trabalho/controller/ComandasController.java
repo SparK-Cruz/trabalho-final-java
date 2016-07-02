@@ -7,14 +7,14 @@ import edu.ctpositivo.trabalho.dao.*;
 import edu.ctpositivo.trabalho.model.*;
 import edu.ctpositivo.trabalho.view.comandas.*;
 
-public class ComandasController{
+public class ComandasController extends BaseController{
   private static ComandaDAO comandaDao = new ComandaDAO();
   private static ItemComandaDAO itemDao = new ItemComandaDAO();
   private static ProdutoDAO produtoDao = new ProdutoDAO();
 
   //Helper
-  public void validarProduto(int idProduto) throws Exception{
-    produtoDao.findById(idProduto);
+  public Produto findProduto(int idProduto) throws Exception{
+    return produtoDao.findById(idProduto);
   }
   //Helper
   public Comanda findComanda(int idComanda) throws Exception{
@@ -25,7 +25,7 @@ public class ComandasController{
     return itemDao.findByIdComanda(idComanda);
   }
 
-  public void nova(Input entrada){
+  public void nova(){
     Comanda model = new Comanda();
     List<ItemComanda> itens;
 
@@ -59,6 +59,8 @@ public class ComandasController{
 
     MostrarQualView mostrarQualView = new MostrarQualView(this);
     id = mostrarQualView.render();
+    if(id == 0)
+      return;
 
     while(true){
       try{
@@ -83,6 +85,8 @@ public class ComandasController{
 
     ExcluirQualView excluirQualView = new ExcluirQualView(this);
     id = excluirQualView.render();
+    if(id == 0)
+      return;
 
     while(true){
       try{

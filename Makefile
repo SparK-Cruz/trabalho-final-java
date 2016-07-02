@@ -3,6 +3,7 @@ compilar:
 	-@javac @sources.txt
 	-@rm sources.txt
 	-@jar -cfm main.jar MANIFEST.MF -C src/ .
+	-@rm -Rf bin
 	-@mkdir -p bin
 	-@mv main.jar bin/
 

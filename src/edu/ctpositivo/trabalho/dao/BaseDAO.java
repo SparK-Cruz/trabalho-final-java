@@ -67,4 +67,8 @@ public abstract class BaseDAO<T extends IModel>{
   public boolean isNew(T model){
     return model.getId() == 0;
   }
+
+  public int count(){
+    return getRecords().size();
+  }
 }
